@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0d83a6"],{"79d2":function(e,t,n){"use strict";n.r(t);var r=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",[n("img",{attrs:{src:"http://kinokolabo.herokuapp.com/qrcode/create?id="+e.id}})])},o=[],a={name:"QRCode",data:function(){return{id:this.$route.query.id}}},c=a,i=n("2877"),d=Object(i["a"])(c,r,o,!1,null,"793742fc",null);t["default"]=d.exports}}]);
+//# sourceMappingURL=chunk-2d0d83a6.69440d7f.js.map
