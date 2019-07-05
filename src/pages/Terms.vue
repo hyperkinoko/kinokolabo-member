@@ -1,5 +1,5 @@
 <template>
-    <main id="main" class="content-area">
+    <main>
         <h1>利用規約</h1>
         <h2>承諾</h2>
         <p>
