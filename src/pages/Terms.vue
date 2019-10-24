@@ -61,7 +61,7 @@
         <h2>期間・解除</h2>
         <p>本規約は、2019年7月1日より効力を持ちます。</p>
         <p>本規約は、ご利用者様が登録を解除されるか、「キノコラボ」及び「ほうかご もくもく会」のサービスが終了するまで、当方とご利用者様の間で有効であるとします。</p>
-        <el-button style="float: right" @click="next">承諾します</el-button>
+        <el-button @click="next">承諾します</el-button>
     </main>
 </template>
 

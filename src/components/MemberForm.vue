@@ -1,15 +1,16 @@
 <template>
-    <el-form :model="memberForm" :rules="rules" ref="memberForm" label-width="200px" style="width: 700px">
+    <el-form :model="memberForm" :rules="rules" ref="memberForm" label-width="200px" style="width: 700px" class="container">
         <el-form-item label="お名前" prop="name">
-            <el-input type="text" v-model="memberForm.name" auto-complete="off"></el-input>
+            <el-input type="text" v-model="memberForm.name" auto-complete="off" class="col-10"></el-input>
 <!--            <el-input type="text" v-model="memberForm.firstName" auto-complete="off"></el-input>-->
         </el-form-item>
         <el-form-item label="フリガナ" prop="nameKana">
-            <el-input type="text" v-model="memberForm.nameKana" auto-complete="off"></el-input>
+            <el-input type="text" v-model="memberForm.nameKana" auto-complete="off" class="col-10"></el-input>
 <!--           <el-input type="text" v-model="memberForm.firstKanaName" auto-complete="off"></el-input>-->
         </el-form-item>
         <el-form-item label="郵便番号" prop="zip">
-            <el-input type="text" v-model="memberForm.zip" auto-complete="off"></el-input>
+            <el-input type="text" v-model="memberForm.zip" auto-complete="off" class="col-5"></el-input>
+            <el-button @click="fetchAddress" class="col-4">郵便番号→住所</el-button>
         </el-form-item>
         <el-form-item label="都道府県" prop="pref">
             <el-select v-model="memberForm.pref" placeholder="Select">
@@ -36,12 +37,16 @@
 <!--        <el-form-item label="パスワード" prop="passwd">-->
 <!--            <el-input type="password" v-model="memberForm.passwd" auto-complete="off"></el-input>-->
 <!--        </el-form-item>-->
-        <el-button style="float: right" type="primary" @click="regist">登録</el-button>
+        <el-button type="primary" @click="regist">登録</el-button>
     </el-form>
 </template>
 
+
 <script>
     import axios from 'axios'
+    import axiosJsonpAdapter from 'axios-jsonp'
+
+    const ZIPCODE_API_URL = 'http://zipcloud.ibsnet.co.jp/api/search'
 
     export default {
         name: "MemberForm",
@@ -171,7 +176,7 @@
                     ],
                     pref: [
                         { required: true, message: '入力必須です', trigger: 'blur' },
-                        { type : "number", min: 1, message: '選択してください', trigger: 'change' },
+                        // { type : "number", min: 1, message: '選択してください', trigger: 'change' },
                     //     {
                     //         validator: (rule, value, callback) => {
                     //             if (value === 0) {
@@ -243,11 +248,34 @@
                             })
                     }
                 });
+            },
+            async fetchAddress() {
+                // 郵便番号のバリデーションチェック
+                const reg = /^\d{7}$/
+                if (!reg.test(this.memberForm.zip)) return
+
+                // 住所apiを叩く
+                const res = await axios.get(ZIPCODE_API_URL, {
+                    adapter: axiosJsonpAdapter,
+                    params: {
+                        zipcode: this.memberForm.zip
+                    }
+                })
+
+                // 存在しない郵便番号でapiを叩くと200以外のステータスが返ってくる
+                if (res.status !== 200) return
+
+                // 返却されたデータを挿入する
+                this.memberForm.pref = res.data.results[0].address1
+                this.memberForm.addr = res.data.results[0].address2 + res.data.results[0].address3
             }
         }
     }
 </script>
 
 <style scoped>
+    el-button {
+
+    }
 
 </style>

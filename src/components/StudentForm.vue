@@ -68,6 +68,7 @@
 
 <script>
     import axios from 'axios'
+    import zipcode from 'yubinbango-core'
 
     export default {
         name: "StudentForm",
@@ -270,6 +271,15 @@
                 }
             }
         },
+        watch: {
+            zip: function(zip) {
+                let _this = this
+                zipcode.Core(zip, function(addr) {
+                    _this.studentForm.pref  = addr.region_id // 都道府県ID
+                    _this.studentForm.addr = addr.locality + addr.street // 市区町村
+                })
+            }
+        },
         methods : {
             fetchMemberId() {
                 if(this.sameAs) {
@@ -294,7 +304,7 @@
             getYears() {
                 let years = new Array()
                 const thisYear = new Date().getFullYear()
-                for(let y = 1920; y < thisYear; y++) {
+                for(let y = thisYear - 1; y >= 1920; y--) {
                     years.push({"value": y})
                 }
                 return years
